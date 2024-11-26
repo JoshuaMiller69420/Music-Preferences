@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 
 default_font = ("Arial", 20)
@@ -20,8 +21,9 @@ label = tk.Label(window,
 
 fav_band = tk.Entry(window, 
                  font=default_font,
-                 width=18).pack()
-fav_band.insert(0, "Band Here")
+                 width=18)
+fav_band.pack()
+#fav_band.insert(0, "Band Here")
 
 label = tk.Label(window, 
                  text="Select your favorite music genres:",
@@ -41,32 +43,47 @@ check_jazz = tk.IntVar()
 checkbox_jazz = tk.Checkbutton(
     window, text="Jazz", variable=check_jazz).pack(anchor="w")
 
+method = tk.StringVar(value="Something")
+
 label = tk.Label(window, 
                  text="Choose your preferred listening method:",
                  fg="black",
                  bd=20,
                  font=("arial", 17)).pack()
 
-tk.Radiobutton(window, font=("arial", 10), text="Streaming", 
-               value="Mr. James Klins").pack(anchor="w")
-tk.Radiobutton(window, font=("arial", 10), text="CDs", 
-               value="James Clark").pack(anchor="w")
-tk.Radiobutton(window, font=("arial", 10), text="Vinyl", 
-               value="Coby Hughes").pack(anchor="w")
+streaming = tk.Radiobutton(window, font=("arial", 10), text="Streaming", 
+               value="Streaming", variable=method)
+streaming.pack(anchor="w")
+cds = tk.Radiobutton(window, font=("arial", 10), text="CDs", value="CDs", variable=method)
+cds.pack(anchor="w")
+vinyl = tk.Radiobutton(window, font=("arial", 10), text="Vinyl", value="Vinyl", variable=method)
+vinyl.pack(anchor="w")
 
-def get_data():
-    window = tk.Tk()
-    window.title("Music Preferences")
-    window.geometry("300x150")
-    band = fav_band.get()
-    label = tk.Label(window, 
-                 text=band,
-                 fg="black",
-                 font=("Arial", 5))
-    label.pack()
-    window.mainlooop()
+def submit_btn():
+    favorite_artist_data = fav_band.get()
+    genres = []
+    if check_rock.get():
+        genres.append("Rock")
+    if check_pop.get():
+        genres.append("Pop")
+    if check_jazz.get():
+        genres.append("Jazz")
+    listening_method = method.get()
 
-tk.Button(window, text="Submit", bg="blue", fg="white", command=get_data).pack()
+    # Prepare data for the messagebox
+    genres_text = ", ".join(genres) if genres else "None"
+    messagebox.showinfo("Music Preferences",
+                        f"Favorite Artist/Band: {favorite_artist_data}\n"
+                        f"Favorite Genres: {genres_text}\n"
+                        f"Preferred Listening Method: {listening_method}")
+
+    
+
+button = tk.Button(window, text="Submit", bg="blue", fg="white", command=submit_btn)
+button.pack()
+
+
+window.mainloop()
 
 
 window.mainloop()
